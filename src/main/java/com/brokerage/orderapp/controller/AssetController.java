@@ -4,12 +4,14 @@ import com.brokerage.orderapp.entity.Asset;
 import com.brokerage.orderapp.service.AssetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/assets")
+@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class AssetController {
     private final AssetService assetService;

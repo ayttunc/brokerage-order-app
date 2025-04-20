@@ -1,10 +1,8 @@
--- Customer
-INSERT INTO customers (id, username, password, roles) VALUES (1, 'testuser', 'password', 'ROLE_USER');
+-- ADMIN user
+INSERT INTO users (username, password, roles) VALUES
+('admin1', '$2a$10$uWCFQx7JkFHo/Bx0WpN7B.KOonSmpHwUI47TMDqkzIvnythDJRChW', 'ADMIN'),
+('admin2', '$2a$10$uWCFQx7JkFHo/Bx0WpN7B.KOonSmpHwUI47TMDqkzIvnythDJRChW', 'ADMIN'),
 
--- TRY Asset (usable and equals to total size)
-INSERT INTO assets (id, customer_id, asset_name, size, usable_size)
-VALUES (1, 1, 'TRY', 10000.00, 10000.00);
-
--- Different asset (e.g THYAO)
-INSERT INTO assets (id, customer_id, asset_name, size, usable_size)
-VALUES (2, 1, 'THYAO', 100, 100);
+-- CUSTOMER user
+('user1', '$2a$10$uWCFQx7JkFHo/Bx0WpN7B.KOonSmpHwUI47TMDqkzIvnythDJRChW', 'CUSTOMER'),
+('user2', '$2a$10$uWCFQx7JkFHo/Bx0WpN7B.KOonSmpHwUI47TMDqkzIvnythDJRChW', 'CUSTOMER');
