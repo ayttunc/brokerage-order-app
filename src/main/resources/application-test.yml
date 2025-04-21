@@ -32,5 +32,6 @@ spring:
       ddl-auto: update
     defer-datasource-initialization: true
 
-secret: EciT9XQnGZk8vU3y7gkKmHw2Z5vTzL1rBG3RnJ5FpU8=
-expiration: 36000000  # 10 hours in milliseconds
+jwt:
+  secret: EciT9XQnGZk8vU3y7gkKmHw2Z5vTzL1rBG3RnJ5FpU8=
+  expiration: 36000000  # 10 hours in milliseconds

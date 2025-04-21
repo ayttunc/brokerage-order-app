@@ -17,6 +17,10 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
+  h2:
+    console:
+      enabled: true
+
   datasource:
     url: jdbc:h2:mem:brokerage
     driverClassName: org.h2.Driver
@@ -28,9 +32,6 @@ spring:
       ddl-auto: update
     defer-datasource-initialization: true
 
-  h2:
-    console:
-      enabled: true
-
-secret: EciT9XQnGZk8vU3y7gkKmHw2Z5vTzL1rBG3RnJ5FpU8=
-expiration: 36000000  # 10 hours in milliseconds
+jwt:
+  secret: EciT9XQnGZk8vU3y7gkKmHw2Z5vTzL1rBG3RnJ5FpU8=
+  expiration: 36000000  # 10 hours in milliseconds
