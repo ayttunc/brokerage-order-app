@@ -5,6 +5,8 @@ import com.brokerage.orderapp.entity.Order;
 import com.brokerage.orderapp.kafka.OrderKafkaProducer;
 import com.brokerage.orderapp.kafka.dto.OrderMessage;
 import com.brokerage.orderapp.service.OrderService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/orders")
-@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -26,7 +27,8 @@ public class OrderController {
     private final OrderKafkaProducer orderKafkaProducer;
 
     @PostMapping
-    public ResponseEntity<String> createOrder(@RequestBody OrderRequest request) {
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('CUSTOMER') and #request.customerId.toString() == principal.username)")
+    public ResponseEntity<String> createOrder(@Valid @RequestBody OrderRequest request) {
 
         OrderMessage message = OrderMessage.builder()
                 .traceId(UUID.randomUUID().toString())
@@ -44,15 +46,21 @@ public class OrderController {
     }
 
     @DeleteMapping("/{orderId}")
-    public ResponseEntity<Void> cancelOrder(@PathVariable Long orderId) {
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('CUSTOMER') and @orderService.findById(#orderId).customerId.toString() == principal.username)")
+    public ResponseEntity<Void> cancelOrder(@PathVariable @NotNull(message = "Order ID is required") Long orderId) {
         orderService.cancelOrder(orderId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<Order>> listOrders(@RequestParam Long customerId,
-                                                  @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-                                                  @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('CUSTOMER') and #customerId.toString() == principal.username)")
+    public ResponseEntity<List<Order>> listOrders(
+            @RequestParam @NotNull(message = "Customer ID is required") Long customerId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            LocalDateTime endDate
+    ) {
         List<Order> orders = (startDate != null && endDate != null)
                 ? orderService.listOrders(customerId, startDate, endDate)
                 : orderService.listOrders(customerId);
