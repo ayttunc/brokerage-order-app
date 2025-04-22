@@ -31,7 +31,7 @@ A Spring Boot microservice that allows brokerage firm employees to create, list,
 
 ### Clone & Build
 ```bash
-git clone https://github.com/<your‑org>/brokerage-order-app.git
+git clone https://github.com/ayttunc/brokerage-order-app.git
 cd brokerage-order-app
 mvn clean verify
 ```
